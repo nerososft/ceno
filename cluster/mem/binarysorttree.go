@@ -44,18 +44,10 @@ func NewBinarySortTree(node *types.Node) *BinarySortTree {
 Search 根据hash搜索节点
 */
 func Search(tree *BinarySortTree, hash int) bool {
-	if tree == nil {
+	if SearchNode(tree, hash) == nil {
 		return false
 	}
-	switch {
-	case hash == tree.Node.GetHash():
-		return true
-	case hash < tree.Node.GetHash():
-		return Search(tree.Left, hash)
-	case hash > tree.Node.GetHash():
-		return Search(tree.Right, hash)
-	}
-	return false
+	return true
 }
 
 /*SearchNode ...*/
