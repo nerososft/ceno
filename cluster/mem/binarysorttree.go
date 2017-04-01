@@ -32,6 +32,37 @@ func Insert(tree *BinarySortTree, node *types.Node) *BinarySortTree {
 }
 
 /*
+GetMin 获取hashid最小的节点
+*/
+func GetMin(tree *BinarySortTree) (*types.Node, bool) {
+	if tree == nil {
+		return nil, false
+	}
+
+	for {
+		if tree.Left != nil {
+			tree = tree.Left
+		} else {
+			return tree.Node, true
+		}
+	}
+}
+
+/*GetMax 获取hashid最大的节点*/
+func GetMax(tree *BinarySortTree) (*types.Node, bool) {
+	if tree == nil {
+		return nil, false
+	}
+	for {
+		if tree.Right != nil {
+			tree = tree.Right
+		} else {
+			return tree.Node, true
+		}
+	}
+}
+
+/*
 NewBinarySortTree 创建二叉排序树
 */
 func NewBinarySortTree(node *types.Node) *BinarySortTree {
