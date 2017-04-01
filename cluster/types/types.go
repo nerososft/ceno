@@ -12,3 +12,10 @@ type Node struct {
 	token      string //节点连接授权码
 	timestamp  string //时间戳
 }
+
+func (node *Node) String() string {
+	return "a"
+}
+func (node *Node) GetHash() string {
+	return node.hash
+}
