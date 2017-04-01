@@ -1,19 +1,34 @@
 package mem
 
-import "ceno/cluster/types"
-import "fmt"
+import (
+	"ceno/cluster/types"
+	"encoding/json"
+	"fmt"
+	"os"
+)
 
 /*
 BinarySortTree 节点
 */
 type BinarySortTree struct {
-	Left  *BinarySortTree //左子树
-	Node  *types.Node     //节点信息
-	Right *BinarySortTree //右子树
+	Left  *BinarySortTree `json:"left"`  //左子树
+	Node  *types.Node     `json:"node"`  //节点信息
+	Right *BinarySortTree `json:"right"` //右子树
 }
 
+/*
+Insert 插入节点
+*/
 func Insert(tree *BinarySortTree, node *types.Node) *BinarySortTree {
-	return nil
+	if tree == nil {
+		return &BinarySortTree{nil, node, nil}
+	}
+	if node.GetHash() < tree.Node.GetHash() {
+		tree.Left = Insert(tree.Left, node)
+		return tree
+	}
+	tree.Right = Insert(tree.Right, node)
+	return tree
 }
 
 /*
@@ -25,7 +40,10 @@ func NewBinarySortTree(node *types.Node) *BinarySortTree {
 	return tree
 }
 
-func Search(tree *BinarySortTree, hash string) bool {
+/*
+Search 根据hash搜索节点
+*/
+func Search(tree *BinarySortTree, hash int) bool {
 	if tree == nil {
 		return false
 	}
@@ -39,7 +57,27 @@ func Search(tree *BinarySortTree, hash string) bool {
 	}
 	return false
 }
-func Delete(tree *BinarySortTree, hash string) bool {
+
+/*SearchNode ...*/
+func SearchNode(tree *BinarySortTree, hash int) *types.Node {
+	if tree == nil {
+		return nil
+	}
+	switch {
+	case hash == tree.Node.GetHash():
+		return tree.Node
+	case hash < tree.Node.GetHash():
+		return SearchNode(tree.Left, hash)
+	case hash > tree.Node.GetHash():
+		return SearchNode(tree.Right, hash)
+	}
+	return nil
+}
+
+/*
+Delete 删除节点
+*/
+func Delete(tree *BinarySortTree, hash int) bool {
 	if tree == nil {
 		return false
 	}
@@ -71,7 +109,7 @@ func Delete(tree *BinarySortTree, hash string) bool {
 
 func deleteNode(parent, tree *BinarySortTree) bool {
 	if tree.Left == nil && tree.Right == nil {
-		fmt.Println("delete() 左右树都为空 ")
+		//fmt.Println("delete() 左右树都为空 ")
 		if parent.Left == tree {
 			parent.Left = nil
 		} else if parent.Right == tree {
@@ -82,7 +120,7 @@ func deleteNode(parent, tree *BinarySortTree) bool {
 	}
 
 	if tree.Right == nil { //右树为空
-		fmt.Println("delete() 右树为空 ")
+		//fmt.Println("delete() 右树为空 ")
 		parent.Left = tree.Left.Left
 		parent.Node = tree.Left.Node
 		parent.Right = tree.Left.Right
@@ -92,7 +130,7 @@ func deleteNode(parent, tree *BinarySortTree) bool {
 	}
 
 	if tree.Left == nil { //左树为空
-		fmt.Println("delete() 左树为空 ")
+		//fmt.Println("delete() 左树为空 ")
 		parent.Left = tree.Right.Left
 		parent.Node = tree.Right.Node
 		parent.Right = tree.Right.Right
@@ -101,7 +139,7 @@ func deleteNode(parent, tree *BinarySortTree) bool {
 		return true
 	}
 
-	fmt.Println("delete() 左右树都不为空 ")
+	//fmt.Println("delete() 左右树都不为空 ")
 	previous := tree
 	//找到左子节点的最右叶节点，将其值替换至被删除节点
 	//然后将这个最右叶节点清除，所以说，为了维持树，
@@ -149,6 +187,9 @@ func Walker(tree *BinarySortTree) <-chan *types.Node {
 	return ch
 }
 
+/*
+Compare ...
+*/
 func Compare(tree1, tree2 *BinarySortTree) bool {
 	c1, c2 := Walker(tree1), Walker(tree2)
 	for {
@@ -162,4 +203,13 @@ func Compare(tree1, tree2 *BinarySortTree) bool {
 		}
 	}
 	return false
+}
+
+func (tree *BinarySortTree) String() string {
+	jsons, err := json.Marshal(tree)
+	if err != nil {
+		fmt.Println("fatal error:", err.Error())
+		os.Exit(1)
+	}
+	return string(jsons)
 }
