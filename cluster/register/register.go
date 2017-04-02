@@ -3,6 +3,23 @@ package register
 import "ceno/cluster/types"
 
 /*
+Register 注册中心
+*/
+type Register struct {
+	Rid       string
+	IP        string
+	Port      int16
+	Timestamp string
+}
+
+/*
+LoadRegisterList 读取注册中心节点列表
+*/
+func (reg *Register) LoadRegisterList() {
+
+}
+
+/*
 MemSaveNodeToNodeList 节点信息存入内存
 */
 func MemSaveNodeToNodeList(node *types.Node) (int, error) {
