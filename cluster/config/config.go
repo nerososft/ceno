@@ -1,5 +1,9 @@
 package config
 
+import "io/ioutil"
+import "fmt"
+import "os"
+
 /*
 Config 配置文件
 */
@@ -19,14 +23,21 @@ type NodeIPTable struct {
 NewConfig 创建Config
 */
 func NewConfig(confpath string) *Config {
-	return nil
+	return &Config{
+		ConfPath: confpath,
+	}
 }
 
 /*
 LoadConfig 读取配置文件
 */
 func (config *Config) LoadConfig() string {
-	return ""
+	dat, err := ioutil.ReadFile(config.ConfPath)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(1)
+	}
+	return string(dat)
 }
 
 /*
