@@ -30,6 +30,23 @@ func NodeLostConnection() {
 
 }
 
-func main() {
+/*
+ChooseLeader 选择注册中心leader节点
+*/
+func ChooseLeader() {
+
+}
+
+/*
+Vote 投票
+*/
+func Vote() {
+
+}
+
+/*
+Listen 监听客户端连接
+*/
+func Listen() {
 
 }
