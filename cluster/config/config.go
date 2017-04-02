@@ -1,14 +1,23 @@
 package config
 
-import "io/ioutil"
-import "fmt"
-import "os"
+import (
+	"ceno/common/json"
+	"ceno/common/mmap"
+	"fmt"
+	"io/ioutil"
+	"os"
+)
 
 /*
 Config 配置文件
 */
 type Config struct {
 	ConfPath string
+}
+
+//CurrentConfig 当前配置
+type CurrentConfig struct {
+	IPTables []NodeIPTable
 }
 
 /*
@@ -28,6 +37,43 @@ func NewConfig(confpath string) *Config {
 	}
 }
 
+type node struct {
+	ip_addr string
+	port    int
+}
+
+/*
+GetCurrentConfig 获取当前配置
+*/
+func (config *Config) GetCurrentConfig() {
+	conf := config.LoadConfig()
+	confByte := []byte(conf)
+	confMap := json.Json2Map(confByte)
+
+	fmt.Println(os.Stderr, confMap)
+
+	ipTable := confMap["ip_table"]
+	if ipS, ok := ipTable.(map[string]interface{}); ok {
+		for _, value := range ipS {
+			// if node, nOk := value.(map[string]interface{}); nOk {
+			// 	for k, v := range node {
+			// 		fmt.Println(k, v)
+			// 	}
+			// } else {
+			// 	fmt.Fprintln(os.Stderr, "fatal error: ip tables format error")
+			// 	os.Exit(1)
+			// }
+			result := &node{}
+			err := mmap.FillStruct(value.(map[string]interface{}), result)
+			fmt.Println(err, fmt.Sprintf("%+v"), *result)
+		}
+	} else {
+		fmt.Fprintln(os.Stderr, "fatal error: ip tables format error")
+		os.Exit(1)
+	}
+
+}
+
 /*
 LoadConfig 读取配置文件
 */
@@ -43,6 +89,6 @@ func (config *Config) LoadConfig() string {
 /*
 GetIPTable 获取注册中心节点ip表
 */
-func (config *Config) GetIPTable() []*NodeIPTable {
-	return nil
+func (currentConfig *CurrentConfig) GetIPTable() []NodeIPTable {
+	return currentConfig.IPTables
 }

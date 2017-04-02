@@ -1,10 +1,11 @@
 package main
 
-import "ceno/cluster/config"
-import "fmt"
-import "os"
+import (
+	"ceno/cluster/config"
+)
 
 func main() {
 	conf := config.NewConfig("../register.conf")
-	fmt.Fprintln(os.Stderr, conf.LoadConfig())
+	conf.GetCurrentConfig()
+
 }
