@@ -1,8 +1,7 @@
 package config
 
 import (
-	"ceno/common/json"
-	"ceno/common/mmap"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -17,15 +16,21 @@ type Config struct {
 
 //CurrentConfig 当前配置
 type CurrentConfig struct {
-	IPTables []NodeIPTable
+	IPTable []struct {
+		Node struct {
+			IPAddr string `json:"ip_addr"`
+			Port   int    `json:"port"`
+		} `json:"node"`
+	} `json:"ip_table"`
 }
 
-/*
-NodeIPTable 注册中心配置节点信息
-*/
-type NodeIPTable struct {
-	IP   string
-	port int16
+type IPTable struct {
+	node Node
+}
+
+type Node struct {
+	IPAddr string
+	Port   int
 }
 
 /*
@@ -37,41 +42,15 @@ func NewConfig(confpath string) *Config {
 	}
 }
 
-type node struct {
-	ip_addr string
-	port    int
-}
-
 /*
 GetCurrentConfig 获取当前配置
 */
-func (config *Config) GetCurrentConfig() {
+func (config *Config) GetCurrentConfig() *CurrentConfig {
 	conf := config.LoadConfig()
-	confByte := []byte(conf)
-	confMap := json.Json2Map(confByte)
 
-	fmt.Println(os.Stderr, confMap)
-
-	ipTable := confMap["ip_table"]
-	if ipS, ok := ipTable.(map[string]interface{}); ok {
-		for _, value := range ipS {
-			// if node, nOk := value.(map[string]interface{}); nOk {
-			// 	for k, v := range node {
-			// 		fmt.Println(k, v)
-			// 	}
-			// } else {
-			// 	fmt.Fprintln(os.Stderr, "fatal error: ip tables format error")
-			// 	os.Exit(1)
-			// }
-			result := &node{}
-			err := mmap.FillStruct(value.(map[string]interface{}), result)
-			fmt.Println(err, fmt.Sprintf("%+v"), *result)
-		}
-	} else {
-		fmt.Fprintln(os.Stderr, "fatal error: ip tables format error")
-		os.Exit(1)
-	}
-
+	var currentConfig *CurrentConfig
+	json.Unmarshal([]byte(conf), &currentConfig)
+	return currentConfig
 }
 
 /*
@@ -88,7 +67,17 @@ func (config *Config) LoadConfig() string {
 
 /*
 GetIPTable 获取注册中心节点ip表
+此处应该使用动态数组
 */
-func (currentConfig *CurrentConfig) GetIPTable() []NodeIPTable {
-	return currentConfig.IPTables
+func (currentConfig *CurrentConfig) GetIPTable() [6]IPTable {
+	var table [6]IPTable
+	for k, v := range currentConfig.IPTable {
+		table[k] = IPTable{
+			node: Node{
+				IPAddr: v.Node.IPAddr,
+				Port:   v.Node.Port,
+			},
+		}
+	}
+	return table
 }
