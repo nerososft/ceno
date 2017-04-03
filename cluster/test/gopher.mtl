@@ -1,0 +1,125 @@
+Skip to content
+This repository
+Search
+Pull requests
+Issues
+Gist
+ @nerososft
+ Sign out
+ Watch 50
+  Star 1,331
+ Fork 61 fogleman/pt
+ Code  Issues 4  Pull requests 0  Projects 0  Wiki  Pulse  Graphs
+You’re editing a file in a project you don’t have write access to. We’ve created a fork of this project for you to commit your proposed changes to. Submitting a change to this file will write it to a new branch in your fork, so you can send a pull request.
+pt/examples/ 
+gopher.mtl
+   or cancel
+    
+ Edit file    Preview changes
+1
+# Blender MTL File: 'gopher.blend'
+2
+# Material Count: 7
+3
+​
+4
+newmtl Body
+5
+Ns 96.078431
+6
+Ka 0.000000 0.000000 0.000000
+7
+Kd 0.000000 0.429367 0.640000
+8
+Ks 0.500000 0.500000 0.500000
+9
+Ni 1.000000
+10
+d 1.000000
+11
+illum 2
+12
+​
+13
+newmtl Eye-White
+14
+Ns 96.078431
+15
+Ka 0.000000 0.000000 0.000000
+16
+Kd 0.800000 0.800000 0.800000
+17
+Ks 1.000000 1.000000 1.000000
+18
+Ni 1.000000
+19
+d 1.000000
+20
+illum 2
+21
+​
+22
+newmtl Material
+23
+Ns 96.078431
+24
+Ka 0.000000 0.000000 0.000000
+25
+Kd 0.640000 0.640000 0.640000
+26
+Ks 0.500000 0.500000 0.500000
+27
+Ni 1.000000
+28
+d 1.000000
+29
+illum 2
+30
+​
+31
+newmtl Material.001
+32
+Ns 96.078431
+33
+Ka 0.000000 0.000000 0.000000
+34
+Kd 0.000000 0.000000 0.000000
+35
+Ks 0.000000 0.000000 0.000000
+36
+Ni 1.000000
+37
+d 1.000000
+38
+illum 2
+39
+​
+40
+newmtl NoseTop
+41
+Ns 96.078431
+42
+Ka 0.000000 0.000000 0.000000
+43
+Kd 0.000000 0.000000 0.000000
+44
+Ks 0.000000 0.000000 0.000000
+45
+Ni 1.000000
+46
+d 1.000000
+47
+illum 2
+48
+​
+49
+newmtl SkinColor
+@nerososft
+Propose file change
+
+Update 
+
+Add an optional extended description…
+Propose file change  Cancel
+Contact GitHub API Training Shop Blog About
+© 2017 GitHub, Inc. Terms Privacy Security Status Help
