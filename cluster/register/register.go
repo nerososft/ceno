@@ -1,6 +1,11 @@
 package register
 
-import "ceno/cluster/types"
+import (
+	"ceno/cluster/types"
+	"ceno/common"
+	"fmt"
+	"net"
+)
 
 /*
 Register 注册中心
@@ -10,6 +15,15 @@ type Register struct {
 	IP        string
 	Port      int16
 	Timestamp string
+}
+
+func NewRegister(rid string, ip string, port int16, timestamp string) *Register {
+	return &Register{
+		Rid:       rid,
+		IP:        ip,
+		Port:      port,
+		Timestamp: timestamp,
+	}
 }
 
 /*
@@ -22,48 +36,70 @@ func (reg *Register) LoadRegisterList() {
 /*
 MemSaveNodeToNodeList 节点信息存入内存
 */
-func MemSaveNodeToNodeList(node *types.Node) (int, error) {
+func (reg *Register) MemSaveNodeToNodeList(node *types.Node) (int, error) {
 	return 1, nil
 }
 
 /*
 DeleteNodeFromMemNodeList 从内存中删除节点信息
 */
-func DeleteNodeFromMemNodeList() {
+func (reg *Register) DeleteNodeFromMemNodeList() {
 
 }
 
 /*
 NodeReg 节点上线并注册
 */
-func NodeReg() {
+func (reg *Register) NodeReg() {
 
 }
 
 /*
 NodeLostConnection 节点下线
 */
-func NodeLostConnection() {
+func (reg *Register) NodeLostConnection() {
 
 }
 
 /*
 ChooseLeader 选择注册中心leader节点
 */
-func ChooseLeader() {
+func (reg *Register) ChooseLeader() {
 
 }
 
 /*
 Vote 投票
 */
-func Vote() {
+func (reg *Register) Vote() {
 
+}
+
+func handleConnection(conn net.Conn) {
+	buffer := make([]byte, 1024)
+	_, err := conn.Read(buffer)
+	common.CheckError(err)
+	fmt.Println(string(buffer))
 }
 
 /*
 Listen 监听客户端连接
 */
-func Listen() {
+func (reg *Register) Listen() {
+	netListen, err := net.Listen("tcp", "localhost:6060")
+	common.CheckError(err)
+	defer netListen.Close()
+	common.Log("Waiting for clients")
+	for {
+		conn, err := netListen.Accept()
+		if err != nil {
+			continue
+		}
 
+		//timeouSec :=10
+		//conn.
+		common.Log(conn.RemoteAddr().String(), " tcp connect success")
+		go handleConnection(conn)
+
+	}
 }

@@ -1,6 +1,8 @@
 package common
 
 import (
+	"fmt"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -36,4 +38,14 @@ func appendString(bs []string, b byte) []string {
 	}
 
 	return append(bs, strconv.Itoa(s))
+}
+
+func CheckError(err error) {
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Fatal error: %s", err.Error())
+		os.Exit(1)
+	}
+}
+func Log(v ...interface{}) {
+	fmt.Println(v...)
 }
